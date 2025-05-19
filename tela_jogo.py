@@ -7,7 +7,7 @@ class TelaJogo:
         self.tela = tela_principal
         self.manager = pygame_gui.UIManager(self.tela.get_size())
 
-        self.fundo = pygame.image.load('Projeto_game/fundo.jpg')
+        self.fundo = pygame.image.load('fundo.jpg')
         self.fundo = pygame.transform.scale(self.fundo, self.tela.get_size())
 
         self.fonte = pygame.font.Font(None, 48)

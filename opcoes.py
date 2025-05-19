@@ -7,7 +7,7 @@ class TelaOpcoes:
         self.manager = pygame_gui.UIManager((800, 600))  # Gerenciador da interface para a tela de 800x600
 
         # Carrega e redimensiona a imagem de fundo para as opções
-        self.fundo_opcoes = pygame.image.load('Projeto_game/fundo.jpg')
+        self.fundo_opcoes = pygame.image.load('fundo.jpg')
         self.fundo_opcoes = pygame.transform.scale(self.fundo_opcoes, (800, 600))
 
         # Fonte para o título da tela de opções
