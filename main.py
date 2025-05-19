@@ -10,11 +10,11 @@ screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Jogo")
 
 # Carrega e ajusta a imagem de fundo para a tela principal
-fundo = pygame.image.load('fundo.jpg')
+fundo = pygame.image.load('Projeto_game/fundo.jpg')
 fundo = pygame.transform.scale(fundo, (800, 600))
 
 # Fonte do FontAwesome para o ícone hambúrguer no canto superior direito
-fontawesome = pygame.font.Font('fa-solid-900.ttf', 40)
+fontawesome = pygame.font.Font('Projeto_game/fa-solid-900.ttf', 40)
 
 # Cores para estados do ícone hambúrguer (normal, clicado, hover)
 cor_normal = (255, 255, 255)
@@ -49,7 +49,7 @@ clicado = False
 hover_hamburguer = False
 
 # Carrega o ícone do Instagram e define sua posição na tela
-instagram_icon = pygame.image.load('instagram.png')
+instagram_icon = pygame.image.load('Projeto_game/instagram.png')
 instagram_icon = pygame.transform.scale(instagram_icon, (40, 40))
 instagram_pos = (10, 600 - 50)
 
