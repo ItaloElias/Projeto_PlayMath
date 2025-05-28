@@ -22,7 +22,7 @@ cor_clicado = (180, 180, 180)
 cor_hover = (255, 255, 180)
 
 # Gerenciador da interface pygame_gui para a tela principal
-manager = pygame_gui.UIManager((800, 600))
+manager = pygame_gui.UIManager((800, 600), 'theme.json')
 
 # Botões da tela principal: Jogar, Regras e Sair
 botao1 = pygame_gui.elements.UIButton(

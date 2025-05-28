@@ -4,7 +4,7 @@ import pygame_gui
 class TelaOpcoes:
     def __init__(self, tela_principal):
         self.tela = tela_principal  # Tela principal onde será desenhada a tela de opções
-        self.manager = pygame_gui.UIManager((800, 600))  # Gerenciador da interface para a tela de 800x600
+        self.manager = pygame_gui.UIManager(self.tela.get_size(), 'theme.json')  # Gerenciador da interface para a tela de 800x600
 
         # Carrega e redimensiona a imagem de fundo para as opções
         self.fundo_opcoes = pygame.image.load('fundo.jpg')

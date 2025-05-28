@@ -4,7 +4,7 @@ import pygame_gui
 class TelaRegras:
     def __init__(self, tela_principal):
         self.tela = tela_principal  # Tela principal onde será desenhado
-        self.manager = pygame_gui.UIManager(self.tela.get_size())  # Gerenciador da interface
+        self.manager = pygame_gui.UIManager(self.tela.get_size(), 'theme.json') # Gerenciador da interface
 
         # Surface para o fundo da tela de regras, preenchida com cinza escuro
         self.fundo_regras = pygame.Surface(self.tela.get_size())

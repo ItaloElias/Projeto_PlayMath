@@ -5,7 +5,8 @@ import pygame_gui
 class TelaJogo:
     def __init__(self, tela_principal):
         self.tela = tela_principal
-        self.manager = pygame_gui.UIManager(self.tela.get_size())
+        self.manager = pygame_gui.UIManager(self.tela.get_size(), 'theme.json')
+
 
         self.fundo = pygame.image.load('fundo.jpg')
         self.fundo = pygame.transform.scale(self.fundo, self.tela.get_size())
@@ -72,7 +73,7 @@ class TelaJogo:
         self.alternativas = opcoes
 
     def criar_botoes(self):
-        espaco_y = 200
+        espaco_y = 300
         self.botoes.clear()
         for i in range(3):
             botao = pygame_gui.elements.UIButton(
@@ -121,7 +122,7 @@ class TelaJogo:
 
         # Título
         texto = self.fonte_grande.render("Desafio de Matemática", True, (255, 255, 255))
-        self.tela.blit(texto, (self.tela.get_width() // 2 - texto.get_width() // 2, 40))
+        self.tela.blit(texto, (self.tela.get_width() // 2 - texto.get_width() // 2, 150))
 
         if tempo_restante <= 0:
             self.jogo_ativo = False
@@ -186,8 +187,12 @@ class TelaJogo:
             self.botao_recomecar.hide()
             self.botao_voltar_menu.hide()
 
+            largura_tela = 800
             texto_pergunta = self.fonte.render(f"Quanto é: {self.pergunta}?", True, (255, 255, 255))
-            self.tela.blit(texto_pergunta, (250, 120))
+            pos_x = (largura_tela - texto_pergunta.get_width()) // 2
+            pos_y = 220  # altura fixa que você quer
+
+            self.tela.blit(texto_pergunta, (pos_x, pos_y))
 
             texto_tempo = self.fonte.render(f"Tempo: {tempo_restante}s", True, (255, 255, 255))
             texto_pontos = self.fonte.render(f"Pontos: {self.pontos}", True, (255, 255, 255))

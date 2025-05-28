@@ -1,0 +1,32 @@
+{
+  "button": {
+    "colours": {
+      "normal_bg": "#ffec64",
+      "normal_bg_gradient": "#ffab23",
+      "hovered_bg": "#ffab23",
+      "hovered_bg_gradient": "#ffec64",
+      "disabled_bg": "#AAAAAA",
+      "normal_text": "#333333",
+      "hovered_text": "#333333",
+      "disabled_text": "#666666"
+    },
+    "border_width": 1,
+    "border_colour": "#ffaa22",
+    "border_radius": 6,
+    "font": {
+      "name": "Comic Sans MS",
+      "size": 19,
+      "bold": true,
+      "shadow": {
+        "enabled": true,
+        "offset": [0, 1],
+        "colour": "#ffee66"
+      }
+    },
+    "shadow": {
+      "enabled": true,
+      "offset": [0, 1],
+      "colour": "#fff6af"
+    }
+  }
+}
