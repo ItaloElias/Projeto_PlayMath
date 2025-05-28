@@ -20,7 +20,10 @@
 
 - Python  
 - Pygame  
-- Pygame GUI (`pygame_gui`)  
+- Pygame GUI 
+- Webbrowser
+- Arquitetura orientada a objetos
+- FontAwesome  
 
 ## ⚙️ Como Rodar o Projeto
 
