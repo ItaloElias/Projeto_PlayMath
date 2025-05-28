@@ -3,60 +3,51 @@ import pygame_gui
 
 class TelaRegras:
     def __init__(self, tela_principal):
-        self.tela = tela_principal  # Tela principal onde será desenhado
-        self.manager = pygame_gui.UIManager(self.tela.get_size(), 'theme.json') # Gerenciador da interface
+        self.tela = tela_principal  # Tela principal do pygame
+        self.manager = pygame_gui.UIManager(self.tela.get_size(), 'theme.json')  # Gerenciador UI com tema
 
-        # Surface para o fundo da tela de regras, preenchida com cinza escuro
-        self.fundo_regras = pygame.Surface(self.tela.get_size())
-        self.fundo_regras.fill((30, 30, 30))
+        self.fundo_regras = pygame.image.load('fundo.jpg')  # Carrega imagem de fundo
+        self.fundo_regras = pygame.transform.scale(self.fundo_regras, self.tela.get_size())  # Ajusta tamanho da imagem
 
-        # Fontes para título e texto das regras
-        self.fonte_titulo = pygame.font.SysFont(None, 60)
-        self.fonte_texto = pygame.font.SysFont(None, 28)
+        self.fonte_titulo = pygame.font.SysFont(None, 60)  # Fonte grande para título
+        self.fonte_texto = pygame.font.SysFont(None, 28)  # Fonte menor para texto das regras
 
-        # Botão "Voltar" para retornar à tela principal
         self.botao_voltar = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect((20, 20), (150, 40)),
-            text="Voltar",
-            manager=self.manager
+            relative_rect=pygame.Rect((20, 20), (150, 40)),  # Posição e tamanho do botão
+            text="Voltar",  # Texto exibido no botão
+            manager=self.manager  # Gerenciador do botão
         )
 
-        self.voltar_para_main = False  # Flag para indicar quando voltar para a tela principal
+        self.voltar_para_main = False  # Flag para indicar retorno ao menu
 
-        # Lista de strings com as regras do jogo que serão exibidas na tela
         self.texto_regras = [
             "Regras do Jogo:",
             "- Regra 1: Faça isso.",
             "- Regra 2: Não faça aquilo.",
             "- Regra 3: Respeite os outros jogadores.",
             "- Regra 4: Divirta-se!",
-            # Você pode adicionar mais regras aqui
         ]
 
     def process_event(self, evento):
-        self.manager.process_events(evento)  # Envia evento para o gerenciador da UI
+        self.manager.process_events(evento)  # Processa eventos da UI
 
-        # Se o botão "Voltar" for pressionado, ativa a flag para voltar para a tela principal
-        if evento.type == pygame_gui.UI_BUTTON_PRESSED:
-            if evento.ui_element == self.botao_voltar:
-                self.voltar_para_main = True
+        if evento.type == pygame_gui.UI_BUTTON_PRESSED:  # Se um botão foi pressionado
+            if evento.ui_element == self.botao_voltar:  # Botão "Voltar" pressionado
+                self.voltar_para_main = True  # Sinaliza retorno ao menu
 
     def update(self, time_delta):
-        self.manager.update(time_delta)  # Atualiza a interface (animações, etc)
+        self.manager.update(time_delta)  # Atualiza gerenciador da UI
 
     def draw(self):
-        self.tela.blit(self.fundo_regras, (0, 0))  # Desenha o fundo cinza
+        self.tela.blit(self.fundo_regras, (0, 0))  # Desenha fundo
 
-        # Renderiza e desenha o título "Regras"
-        titulo = self.fonte_titulo.render("Regras", True, (255, 255, 255))
-        self.tela.blit(titulo, (350, 30))
+        titulo = self.fonte_titulo.render("Regras", True, (255, 255, 255))  # Renderiza título
+        self.tela.blit(titulo, (350, 30))  # Desenha título na tela
 
-        # Desenha as regras uma a uma, com espaçamento vertical
-        y_offset = 100
+        y_offset = 100  # Posição vertical inicial para texto
         for linha in self.texto_regras:
-            texto_renderizado = self.fonte_texto.render(linha, True, (230, 230, 230))
-            self.tela.blit(texto_renderizado, (40, y_offset))
-            y_offset += 35  # Espaço entre as linhas
+            texto_renderizado = self.fonte_texto.render(linha, True, (230, 230, 230))  # Renderiza cada linha
+            self.tela.blit(texto_renderizado, (40, y_offset))  # Desenha linha na tela
+            y_offset += 35  # Avança posição vertical para próxima linha
 
-        # Desenha os elementos da interface (botões, etc)
-        self.manager.draw_ui(self.tela)
+        self.manager.draw_ui(self.tela)  # Desenha botões e elementos da UI
