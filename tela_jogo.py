@@ -7,16 +7,16 @@ class TelaJogo:
         self.tela = tela_principal  # tela principal do pygame onde tudo será desenhado
         self.manager = pygame_gui.UIManager(self.tela.get_size(), 'theme.json')  # gerenciador de UI com tema
 
-        self.fundo = pygame.image.load('fundo.jpg')  # carrega imagem de fundo
+        self.fundo = pygame.image.load('imagens/fundo.jpg')  # carrega imagem de fundo
         self.fundo = pygame.transform.scale(self.fundo, self.tela.get_size())  # ajusta tamanho do fundo à tela
 
         self.fonte = pygame.font.SysFont("comicsansms", 48)  # fonte normal para textos
         self.fonte_grande = pygame.font.SysFont("comicsansms", 60)  # fonte maior para títulos
 
-        self.coracao_vermelho = pygame.image.load('coracao_vermelho.png')  # imagem coração cheio (vida)
+        self.coracao_vermelho = pygame.image.load('imagens/coracao_vermelho.png')  # imagem coração cheio (vida)
         self.coracao_vermelho = pygame.transform.scale(self.coracao_vermelho, (30, 30))  # redimensiona coração
 
-        self.coracao_branco = pygame.image.load('coracao_branco.png')  # imagem coração vazio
+        self.coracao_branco = pygame.image.load('imagens/coracao_branco.png')  # imagem coração vazio
         self.coracao_branco = pygame.transform.scale(self.coracao_branco, (30, 30))  # redimensiona coração vazio
 
         # botão para voltar ao menu principal

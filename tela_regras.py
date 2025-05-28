@@ -6,7 +6,7 @@ class TelaRegras:
         self.tela = tela_principal  # Tela principal do pygame
         self.manager = pygame_gui.UIManager(self.tela.get_size(), 'theme.json')  # Gerenciador UI com tema
 
-        self.fundo_regras = pygame.image.load('fundo.jpg')  # Carrega imagem de fundo
+        self.fundo_regras = pygame.image.load('imagens/fundo.jpg')  # Carrega imagem de fundo
         self.fundo_regras = pygame.transform.scale(self.fundo_regras, self.tela.get_size())  # Ajusta tamanho da imagem
 
         self.fonte_titulo = pygame.font.SysFont(None, 60)  # Fonte grande para título

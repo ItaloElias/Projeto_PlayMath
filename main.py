@@ -9,7 +9,7 @@ pygame.init()
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Jogo")
 
-fundo = pygame.image.load('fundo.jpg')
+fundo = pygame.image.load('imagens/fundo.jpg')
 fundo = pygame.transform.scale(fundo, (800, 600))
 
 fontawesome = pygame.font.Font('fa-solid-900.ttf', 40)
@@ -42,7 +42,7 @@ rodando = True
 clicado = False
 hover_hamburguer = False
 
-instagram_icon = pygame.image.load('instagram.png')
+instagram_icon = pygame.image.load('imagens/instagram.png')
 instagram_icon = pygame.transform.scale(instagram_icon, (40, 40))
 instagram_pos = (10, 600 - 50)
 
