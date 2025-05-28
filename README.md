@@ -7,7 +7,8 @@
 - Menu principal com opções intuitivas  
 - Tela com regras do jogo  
 - Cronômetro regressivo 
-- Sistema de pontuação por acertos  
+- Sistema de pontuação por acertos
+- Sistema de vidas 
 
 ## 🧠 Exemplos de Desafios
 
@@ -32,7 +33,7 @@
 2. Ative o ambiente virtual:
 
    ```bash
-   venv\Scripts\activate  # No Windows
+   venv\Scripts\activate 
    ```
 
 3. Instale as dependências:
