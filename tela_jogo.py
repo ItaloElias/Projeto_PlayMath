@@ -223,13 +223,11 @@ class TelaJogo:
                         if self.vidas <= 0:
                             # Game over: finaliza jogo e mostra opções
                             self.jogo_ativo = False
-                            self.pontos = 0
+                            self.pontos = self.pontos
 
                             # Salva no histórico
-                            agora = datetime.datetime.now()
-                            registro = f"{agora.strftime('%d/%m/%Y %H:%M:%S')} - Pontuação: {self.pontos}"
-                            self.historico_partidas.append(registro)
-
+                            #self.historico_partidas.append(registro)
+    
                             self.mostrar_botoes_fim()
                             return
 
@@ -333,11 +331,6 @@ class TelaJogo:
         self.operacao_escolhida = None
         self.jogo_ativo = False
         self.fim_de_jogo_exibido = False
-
-        # Salva no histórico
-        agora = datetime.datetime.now()
-        registro = f"{agora.strftime('%d/%m/%Y %H:%M:%S')} - Pontuação: {self.pontos}"
-        self.historico_partidas.append(registro)
 
 
         # Esconde botões de resposta e fim, mostra botões de operação

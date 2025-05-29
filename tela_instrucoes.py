@@ -22,7 +22,7 @@ class TelaInstrucoes:
             "1ª Escolha sua operação: +, - ou ×. Aqui a matemática é simples, mas cheia de desafios!<br>"
             "<p>2ª Você tem 30 segundos. Use bem esse tempo e mostre que tá com os cálculos afiados.<br>"
             "<p>3ª Cada resposta certa vale ponto. Cada erro custa uma vida. Você começa com 3, então atenção!<br>"
-            "<p>4ª Perdeu todas as vidas? A rodada termina e a pontuação zera, mas você pode tentar de novo!<br>"
+            "<p>4ª Perdeu todas as vidas? A rodada termina, mas você pode tentar de novo!<br>"
             "<p>5ª Respire fundo, mantenha o foco e resolva com calma. O cronômetro corre, mas você comanda o jogo.<br>"
             "<p>6ª Pronto pra encarar o desafio? Se a resposta for sim, é só apertar 'Jogar'!"
         )

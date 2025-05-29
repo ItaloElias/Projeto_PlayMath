@@ -10,7 +10,8 @@
 - Partida com 30 segundos de duração, contagem regressiva visível  
 - Sistema de pontuação por acertos corretos  
 - Sistema de vidas: começa com 3, perde vidas em respostas erradas  
-- Botões dinâmicos para respostas e navegação (recomeçar ou voltar ao menu)  
+- Botões dinâmicos para respostas e navegação (recomeçar ou voltar ao menu)
+- Histórico de pontuação  
 
 ## 🧠 Exemplos de Desafios
 
