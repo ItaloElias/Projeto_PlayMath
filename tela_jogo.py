@@ -42,11 +42,26 @@ class TelaJogo:
         self.botao_recomecar.hide()  # esconde botão recomeçar
         self.botao_voltar_menu.hide()  # esconde botão voltar ao menu no fim
 
+        # Botões para escolher operação (mesmo estilo dos outros)
+        self.botoes_operacoes = []
+        op_x = 250  # posição horizontal inicial para botões de operação
+        op_y = 250  # posição vertical fixa para os botões
+        largura_botao = 100
+        altura_botao = 50
+        espacamento = 150
+        for i, op in enumerate(['+', '-', '*']):
+            botao = pygame_gui.elements.UIButton(
+                relative_rect=pygame.Rect((op_x + i * espacamento, op_y), (largura_botao, altura_botao)),
+                text=op,
+                manager=self.manager
+            )
+            self.botoes_operacoes.append(botao)
+
         self.voltar_para_main = False  # flag para controlar retorno ao menu principal
 
         self.pontos = 0  # inicializa pontos do jogador
         self.vidas = 3  # número inicial de vidas
-        self.tempo_total = 60  # tempo total do jogo em segundos
+        self.tempo_total = 30  # tempo total do jogo em segundos
         self.inicio = pygame.time.get_ticks()  # marca o tempo inicial do jogo
 
         self.pergunta = ""  # string da pergunta atual
@@ -54,160 +69,186 @@ class TelaJogo:
         self.alternativas = []  # opções de resposta (botões)
         self.botoes = []  # lista de botões para alternativas
 
-        self.gerar_pergunta()  # gera primeira pergunta
-        self.criar_botoes()  # cria botões para respostas
-
-        self.jogo_ativo = True  # flag que indica se o jogo está em andamento
+        self.jogo_ativo = False  # só ativa quando operação escolhida
+        self.operacao_escolhida = None  # operação matemática escolhida pelo jogador
 
     def gerar_pergunta(self):
-        a = random.randint(1, 10)  # primeiro número aleatório
-        b = random.randint(1, 10)  # segundo número aleatório
-        operacao = random.choice(["+", "-", "*"])  # escolhe operação aleatória
+        a = random.randint(1, 10)
+        b = random.randint(1, 10)
+        operacao = self.operacao_escolhida
 
-        if operacao == "+":  # calcula resultado dependendo da operação
+        if operacao == "+":
             resultado = a + b
         elif operacao == "-":
             resultado = a - b
-        else:
+        else:  # "*"
             resultado = a * b
 
-        self.pergunta = f"{a} {operacao} {b}"  # cria string da pergunta
-        # cria lista com a resposta certa e duas opções erradas próximas
-        opcoes = [resultado, resultado + random.randint(1, 5), resultado - random.randint(1, 5)]
-        random.shuffle(opcoes)  # embaralha opções para não ficar previsível
+        self.pergunta = f"{a} {operacao} {b}"
 
-        self.resposta_certa = resultado  # salva resposta correta
-        self.alternativas = opcoes  # salva alternativas
+        opcoes = [resultado, resultado + random.randint(1, 5), resultado - random.randint(1, 5)]
+        random.shuffle(opcoes)
+
+        self.resposta_certa = resultado
+        self.alternativas = opcoes
 
     def criar_botoes(self):
-        espaco_y = 300  # posição vertical inicial dos botões
-        self.botoes.clear()  # limpa lista de botões
-        for i in range(3):  # cria 3 botões para as alternativas
+        espaco_y = 300
+        self.botoes.clear()
+        for i in range(3):
             botao = pygame_gui.elements.UIButton(
-                relative_rect=pygame.Rect((300, espaco_y + i * 70), (200, 50)),  # posição e tamanho
-                text=str(self.alternativas[i]),  # texto do botão é a alternativa
+                relative_rect=pygame.Rect((300, espaco_y + i * 70), (200, 50)),
+                text=str(self.alternativas[i]),
                 manager=self.manager
             )
-            self.botoes.append(botao)  # adiciona botão à lista
+            self.botoes.append(botao)
 
     def mostrar_botoes_jogo(self):
         for botao in self.botoes:
-            botao.show()  # mostra botões das alternativas
-        self.botao_voltar.show()  # mostra botão voltar
-        self.botao_recomecar.hide()  # esconde botão recomeçar (não é momento)
-        self.botao_voltar_menu.hide()  # esconde botão voltar menu fim
+            botao.show()
+        self.botao_voltar.show()
+        self.botao_recomecar.hide()
+        self.botao_voltar_menu.hide()
 
     def mostrar_botoes_fim(self):
         for botao in self.botoes:
-            botao.hide()  # esconde botões de alternativas no fim do jogo
-        self.botao_voltar.hide()  # esconde botão voltar do jogo
+            botao.hide()
+        self.botao_voltar.hide()
 
-        largura_tela = self.tela.get_width()  # pega largura da tela
-        largura_botao = 200  # largura dos botões de fim de jogo
-        espaco_entre = 40  # espaço entre os botões
+        largura_tela = self.tela.get_width()
+        largura_botao = 200
+        espaco_entre = 40
 
-        total_largura = largura_botao * 2 + espaco_entre  # total largura ocupada pelos dois botões
-        x_inicio = (largura_tela - total_largura) // 2  # calcula posição horizontal inicial para centralizar
+        total_largura = largura_botao * 2 + espaco_entre
+        x_inicio = (largura_tela - total_largura) // 2
 
-        self.botao_recomecar.set_position((x_inicio, 450))  # posiciona botão recomeçar
-        self.botao_voltar_menu.set_position((x_inicio + largura_botao + espaco_entre, 450))  # posiciona botão voltar menu
+        self.botao_recomecar.set_position((x_inicio, 450))
+        self.botao_voltar_menu.set_position((x_inicio + largura_botao + espaco_entre, 450))
 
-        self.botao_recomecar.show()  # mostra botão recomeçar
-        self.botao_voltar_menu.show()  # mostra botão voltar ao menu no fim
+        self.botao_recomecar.show()
+        self.botao_voltar_menu.show()
 
     def process_event(self, evento):
-        self.manager.process_events(evento)  # repassa eventos para o gerenciador de UI
+        self.manager.process_events(evento)
 
-        if evento.type == pygame_gui.UI_BUTTON_PRESSED:  # se algum botão foi pressionado
-            if not self.jogo_ativo:  # se o jogo terminou
+        if evento.type == pygame_gui.UI_BUTTON_PRESSED:
+            # Se operação ainda não escolhida, verifica botões de operação
+            if self.operacao_escolhida is None:
+                for botao in self.botoes_operacoes:
+                    if evento.ui_element == botao:
+                        self.operacao_escolhida = botao.text
+                        self.gerar_pergunta()
+                        self.criar_botoes()
+                        self.jogo_ativo = True
+                        # Esconde os botões de operação para não poluir a tela
+                        for b in self.botoes_operacoes:
+                            b.hide()
+                        return
+
+            if not self.jogo_ativo:
                 if evento.ui_element == self.botao_recomecar:
-                    self.reset_jogo()  # reinicia jogo se apertar recomeçar
+                    self.reset_jogo()
                 elif evento.ui_element == self.botao_voltar_menu:
-                    self.voltar_para_main = True  # sinaliza para voltar ao menu principal
+                    self.voltar_para_main = True
                 return
 
             if evento.ui_element == self.botao_voltar:
-                self.voltar_para_main = True  # voltar ao menu durante o jogo
+                self.voltar_para_main = True
 
-            for botao in self.botoes:  # checa se alguma alternativa foi escolhida
+            for botao in self.botoes:
                 if evento.ui_element == botao:
                     if int(botao.text) == self.resposta_certa:
-                        self.pontos += 1  # acerto: incrementa pontos
+                        self.pontos += 1
                     else:
-                        self.vidas -= 1  # erro: perde uma vida
-                        if self.vidas <= 0:  # se não tiver mais vidas
-                            self.jogo_ativo = False  # termina o jogo
-                            self.pontos = 0  # zera pontos
-                            self.mostrar_botoes_fim()  # mostra botões do fim de jogo
+                        self.vidas -= 1
+                        if self.vidas <= 0:
+                            self.jogo_ativo = False
+                            self.pontos = 0
+                            self.mostrar_botoes_fim()
                             return
 
                     if self.jogo_ativo:
-                        self.gerar_pergunta()  # gera nova pergunta
+                        self.gerar_pergunta()
                         for i in range(3):
-                            self.botoes[i].set_text(str(self.alternativas[i]))  # atualiza texto dos botões
+                            self.botoes[i].set_text(str(self.alternativas[i]))
 
-        if evento.type == pygame.KEYDOWN:  # se tecla pressionada
-            if evento.key == pygame.K_ESCAPE:  # se for ESC, volta ao menu
+        if evento.type == pygame.KEYDOWN:
+            if evento.key == pygame.K_ESCAPE:
                 self.voltar_para_main = True
 
     def update(self, time_delta):
-        self.manager.update(time_delta)  # atualiza gerenciador da UI com tempo decorrido
+        self.manager.update(time_delta)
 
     def draw(self):
-        tempo_passado = (pygame.time.get_ticks() - self.inicio) / 1000  # calcula tempo decorrido em segundos
-        tempo_restante = max(0, int(self.tempo_total - tempo_passado))  # tempo restante não pode ser negativo
+        self.tela.blit(self.fundo, (0, 0))
 
-        self.tela.blit(self.fundo, (0, 0))  # desenha fundo na tela
+        # Se operação ainda não foi escolhida, mostra tela de escolha
+        if self.operacao_escolhida is None:
+            texto = self.fonte_grande.render("Escolha a Operação", True, (255, 255, 255))
+            self.tela.blit(texto, (self.tela.get_width() // 2 - texto.get_width() // 2, 150))
+            for botao in self.botoes_operacoes:
+                botao.show()
+            self.manager.draw_ui(self.tela)
+            return
+        else:
+            for botao in self.botoes_operacoes:
+                botao.hide()
 
-        texto = self.fonte_grande.render("Desafio de Matemática", True, (255, 255, 255))  # título do jogo
-        self.tela.blit(texto, (self.tela.get_width() // 2 - texto.get_width() // 2, 150))  # centraliza e desenha título
+        tempo_passado = (pygame.time.get_ticks() - self.inicio) / 1000
+        tempo_restante = max(0, int(self.tempo_total - tempo_passado))
 
-        if tempo_restante <= 0 or not self.jogo_ativo:  # se acabou o tempo ou jogo não ativo
-            self.jogo_ativo = False  # marca jogo como não ativo
-            self.mostrar_botoes_fim()  # mostra botões de fim
+        texto = self.fonte_grande.render("Desafio de Matemática", True, (255, 255, 255))
+        self.tela.blit(texto, (self.tela.get_width() // 2 - texto.get_width() // 2, 150))
 
-            texto_fim = self.fonte.render("Fim de jogo!", True, (255, 255, 255))  # texto fim
+        if tempo_restante <= 0 or not self.jogo_ativo:
+            self.jogo_ativo = False
+            self.mostrar_botoes_fim()
+
+            texto_fim = self.fonte.render("Fim de jogo!", True, (255, 255, 255))
             pos_x = self.tela.get_width() // 2 - texto_fim.get_width() // 2
             pos_y = 350
-            self.tela.blit(texto_fim, (pos_x, pos_y))  # desenha texto fim
+            self.tela.blit(texto_fim, (pos_x, pos_y))
 
-            pontos_str = f"Sua pontuação: {self.pontos}"  # mostra pontuação final
+            pontos_str = f"Sua pontuação: {self.pontos}"
             texto_pontos_fim = self.fonte.render(pontos_str, True, (255, 255, 255))
             pos_x_pontos = self.tela.get_width() // 2 - texto_pontos_fim.get_width() // 2
-            self.tela.blit(texto_pontos_fim, (pos_x_pontos, 260))  # desenha pontuação
+            self.tela.blit(texto_pontos_fim, (pos_x_pontos, 260))
 
-        else:  # jogo ativo e tempo restante
+        else:
             self.jogo_ativo = True
-            self.mostrar_botoes_jogo()  # mostra botões das alternativas
+            self.mostrar_botoes_jogo()
 
-            texto_pergunta = self.fonte.render(f"Quanto é: {self.pergunta}?", True, (255, 255, 255))  # pergunta
-            pos_x = (self.tela.get_width() - texto_pergunta.get_width()) // 2
-            pos_y = 220
-            self.tela.blit(texto_pergunta, (pos_x, pos_y))  # desenha pergunta
+            texto_pergunta = self.fonte.render(f"Quanto é: {self.pergunta} ?", True, (255, 255, 255))
+            self.tela.blit(texto_pergunta, (self.tela.get_width() // 2 - texto_pergunta.get_width() // 2, 215))
+                    # Desenha vidas
+        for i in range(3):
+            if i < self.vidas:
+                self.tela.blit(self.coracao_vermelho, (20 + i * 40, 20))
+            else:
+                self.tela.blit(self.coracao_branco, (20 + i * 40, 20))
 
-            texto_tempo = self.fonte.render(f"Tempo: {tempo_restante}s", True, (255, 255, 255))  # tempo restante
-            texto_pontos = self.fonte.render(f"Pontos: {self.pontos}", True, (255, 255, 255))  # pontos atuais
-            self.tela.blit(texto_tempo, (10, 10))  # desenha tempo no canto superior esquerdo
-            self.tela.blit(texto_pontos, (20, 60))  # desenha pontos abaixo do tempo
+        # Desenha pontuação
+        if self.jogo_ativo:
+            texto_pontos = self.fonte.render(f"Pontos: {self.pontos}", True, (255, 255, 255))
+            self.tela.blit(texto_pontos, (self.tela.get_width() - 230, 20))
 
-            for i in range(3):  # desenha corações que indicam vidas
-                x = self.tela.get_width() - (i + 1) * (self.coracao_vermelho.get_width() + 5) - 10  # posição X
-                y = 10  # posição Y
-                if i < self.vidas:
-                    self.tela.blit(self.coracao_vermelho, (x, y))  # coração cheio para vida restante
-                else:
-                    self.tela.blit(self.coracao_branco, (x, y))  # coração vazio para vida perdida
+        # Desenha cronômetro
+        if self.jogo_ativo:
+            texto_tempo = self.fonte.render(f"Tempo: {tempo_restante}s", True, (255, 255, 255))
+            self.tela.blit(texto_tempo, (self.tela.get_width() // 2 - texto_tempo.get_width() // 2, 70))
 
-        self.manager.draw_ui(self.tela)  # desenha elementos da interface gráfica
+        self.manager.draw_ui(self.tela)
 
     def reset_jogo(self):
-        self.pontos = 0  # reseta pontos
-        self.vidas = 3  # reseta vidas
-        self.inicio = pygame.time.get_ticks()  # reseta tempo inicial
-        self.gerar_pergunta()  # gera nova pergunta
-        for i in range(3):
-            self.botoes[i].set_text(str(self.alternativas[i]))  # atualiza texto dos botões
+        self.pontos = 0
+        self.vidas = 3
+        self.inicio = pygame.time.get_ticks()
+        self.operacao_escolhida = None
+        self.jogo_ativo = False
+        for botao in self.botoes:
+            botao.hide()
+        self.botao_recomecar.hide()
+        self.botao_voltar_menu.hide()
+        for botao in self.botoes_operacoes:
+            botao.show()
 
-        self.mostrar_botoes_jogo()  # mostra botões do jogo
-        self.jogo_ativo = True  # ativa o jogo
-        self.voltar_para_main = False  # reseta flag para voltar ao menu

@@ -28,5 +28,16 @@
       "offset": [0, 1],
       "colour": "#fff6af"
     }
+  },
+  "#textbox_instrucoes": {
+    "font": {
+      "name": "Comic Sans MS",
+      "size": 28,
+      "bold": false,
+      "shadow": {
+        "enabled": false
+      }
+    },
+    "text_colour": "#FFFFFF"
   }
 }

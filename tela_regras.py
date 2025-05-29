@@ -1,53 +1,62 @@
 import pygame
 import pygame_gui
 
-class TelaRegras:
+class TelaInstrucoes:
     def __init__(self, tela_principal):
         self.tela = tela_principal  # Tela principal do pygame
-        self.manager = pygame_gui.UIManager(self.tela.get_size(), 'theme.json')  # Gerenciador UI com tema
+        self.manager = pygame_gui.UIManager(self.tela.get_size(), 'theme.json')
 
-        self.fundo_regras = pygame.image.load('imagens/fundo.jpg')  # Carrega imagem de fundo
-        self.fundo_regras = pygame.transform.scale(self.fundo_regras, self.tela.get_size())  # Ajusta tamanho da imagem
+        self.fundo_instrucoes = pygame.image.load('imagens/fundo_instrucoes.jpg')
+        self.fundo_instrucoes = pygame.transform.scale(self.fundo_instrucoes, self.tela.get_size())
 
-        self.fonte_titulo = pygame.font.SysFont(None, 60)  # Fonte grande para título
-        self.fonte_texto = pygame.font.SysFont(None, 28)  # Fonte menor para texto das regras
-
+        # Botão para voltar
         self.botao_voltar = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect((20, 20), (150, 40)),  # Posição e tamanho do botão
-            text="Voltar",  # Texto exibido no botão
-            manager=self.manager  # Gerenciador do botão
+            relative_rect=pygame.Rect((20, 20), (150, 40)),
+            text="Voltar",
+            manager=self.manager
+        )
+        self.voltar_para_main = False
+
+        # Construa o texto em HTML com quebras de linha para facilitar a formatação
+        self.instrucoes_html = (
+            "- Regra 1: Escolha sua arma: +, - ou ×. Nada de dividir, aqui é pancadaria direta!<br>"
+            "<p>- Regra 2: Você tem 30 segundos. Meio minutinho pra mostrar que sabe fazer conta.<br>"
+            "<p>- Regra 3: Cada acerto vale ponto. Cada erro tira uma vida. Começou com 3, então não vacila.<br>"
+            "<p>- Regra 4: Zerar as vidas? Game over. A matemática não perdoa.<br>"
+            "<p>- Regra 5: Respira, foca, responde. O relógio não para, mas seu cérebro pode brilhar.<br>"
+            "<p>- Regra 6: Se não for pra fazer conta com emoção, nem aperta 'Jogar'."
         )
 
-        self.voltar_para_main = False  # Flag para indicar retorno ao menu
-
-        self.texto_regras = [
-            "Regras do Jogo:",
-            "- Regra 1: Faça isso.",
-            "- Regra 2: Não faça aquilo.",
-            "- Regra 3: Respeite os outros jogadores.",
-            "- Regra 4: Divirta-se!",
-        ]
+        # Crie uma UITextBox que automaticamente habilita a rolagem se o texto for maior que a área definida.
+        self.caixa_instrucoes = pygame_gui.elements.UITextBox(
+            html_text=self.instrucoes_html,
+            relative_rect=pygame.Rect(((self.tela.get_width() - 670) // 2, 150), (670, 400)),
+            manager=self.manager,
+            object_id="#textbox_instrucoes"
+        )
 
     def process_event(self, evento):
-        self.manager.process_events(evento)  # Processa eventos da UI
+        self.manager.process_events(evento)
 
-        if evento.type == pygame_gui.UI_BUTTON_PRESSED:  # Se um botão foi pressionado
-            if evento.ui_element == self.botao_voltar:  # Botão "Voltar" pressionado
-                self.voltar_para_main = True  # Sinaliza retorno ao menu
+        if evento.type == pygame_gui.UI_BUTTON_PRESSED:
+            if evento.ui_element == self.botao_voltar:
+                self.voltar_para_main = True
 
     def update(self, time_delta):
-        self.manager.update(time_delta)  # Atualiza gerenciador da UI
+        self.manager.update(time_delta)
 
     def draw(self):
-        self.tela.blit(self.fundo_regras, (0, 0))  # Desenha fundo
+        self.tela.blit(self.fundo_instrucoes, (0, 0))
+        
+        # Se preferir desenhar um título separado
+        largura_tela = 800
+        fonte_titulo = pygame.font.SysFont("Comic Sans MS", 60)
+        titulo = fonte_titulo.render("Instruções", True, (255, 255, 255))
+        largura_texto = titulo.get_width()
 
-        titulo = self.fonte_titulo.render("Regras", True, (255, 255, 255))  # Renderiza título
-        self.tela.blit(titulo, (350, 30))  # Desenha título na tela
+        pos_x = (largura_tela - largura_texto) // 2
+        pos_y = 30
 
-        y_offset = 100  # Posição vertical inicial para texto
-        for linha in self.texto_regras:
-            texto_renderizado = self.fonte_texto.render(linha, True, (230, 230, 230))  # Renderiza cada linha
-            self.tela.blit(texto_renderizado, (40, y_offset))  # Desenha linha na tela
-            y_offset += 35  # Avança posição vertical para próxima linha
-
-        self.manager.draw_ui(self.tela)  # Desenha botões e elementos da UI
+        self.tela.blit(titulo, (pos_x, pos_y))
+        
+        self.manager.draw_ui(self.tela)
