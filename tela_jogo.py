@@ -1,6 +1,7 @@
 import pygame  # engine gráfica principal
 import random  # geração de números aleatórios para perguntas
 import pygame_gui  # gerenciador de UI para botões e interface gráfica
+import datetime # para registro da data e hora no histórico
 
 class TelaJogo:
     def __init__(self, tela_principal):
@@ -35,8 +36,15 @@ class TelaJogo:
             text="Voltar ao Menu",
             manager=self.manager
         )
-
-        # Esconde botões de fim de jogo inicialmente
+        # Botão Histórico - inicialmente oculto
+        self.botao_historico = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect((80, 450), (200, 40)),
+            text="Histórico",
+            manager=self.manager
+        )
+        
+        # Esconde botões de fim de jogo inicialmente        
+        self.botao_historico.hide()
         self.botao_recomecar.hide()
         self.botao_voltar_menu.hide()
 
@@ -72,6 +80,14 @@ class TelaJogo:
 
         self.jogo_ativo = False
         self.operacao_escolhida = None
+
+        # NOVO: Histórico das partidas
+        self.historico_partidas = []
+
+        # NOVO: Janela do histórico (para controlar abertura/fechamento)
+        self.janela_historico = None
+        self.fim_de_jogo_exibido = False
+
 
     def gerar_pergunta(self):
         # Gera uma pergunta e três alternativas (uma correta + duas incorretas)
@@ -118,21 +134,28 @@ class TelaJogo:
     def mostrar_botoes_fim(self):
         # Esconde botões de resposta e exibe botões de recomeçar e voltar ao menu
         for botao in self.botoes:
-            botao.hide()
+            botao.hide()    
         self.botao_voltar.hide()
 
         largura_tela = self.tela.get_width()
         largura_botao = 200
+        altura_botao = 50
         espaco_entre = 40
 
-        total_largura = largura_botao * 2 + espaco_entre
+        total_largura = largura_botao * 3 + espaco_entre * 2
         x_inicio = (largura_tela - total_largura) // 2
+        y = 450 
 
-        self.botao_recomecar.set_position((x_inicio, 450))
-        self.botao_voltar_menu.set_position((x_inicio + largura_botao + espaco_entre, 450))
+        self.botao_recomecar.set_position((x_inicio, y))
+        self.botao_recomecar.set_dimensions((largura_botao, altura_botao))
+        self.botao_voltar_menu.set_position((x_inicio + largura_botao + espaco_entre, y))
+        self.botao_voltar_menu.set_dimensions((largura_botao, altura_botao))
+        self.botao_historico.set_position((x_inicio + (largura_botao + espaco_entre) * 2, y))
+        self.botao_historico.set_dimensions((largura_botao, altura_botao))
 
         self.botao_recomecar.show()
         self.botao_voltar_menu.show()
+        self.botao_historico.show() 
 
     def process_event(self, evento):
         # Processa eventos da UI, incluindo escolha de operação, respostas e navegação
@@ -157,6 +180,29 @@ class TelaJogo:
                 self.voltar_para_main = True
                 return
 
+            # NOVO: Botão Histórico abre/fecha janela do histórico
+            if evento.ui_element == self.botao_historico:
+                if self.janela_historico is not None:
+                    self.janela_historico.kill()
+                    self.janela_historico = None
+                else:
+                    largura = 400
+                    altura = 300
+                    x = (self.tela.get_width() - largura) // 2
+                    y = (self.tela.get_height() - altura) // 2
+                    self.janela_historico = pygame_gui.elements.UIWindow(
+                        pygame.Rect((x, y), (largura, altura)),
+                        self.manager,
+                        window_display_title="Histórico"
+                    )
+                    texto = "\n".join(self.historico_partidas) if self.historico_partidas else "Nenhuma partida feita."
+                    self.texto_historico = pygame_gui.elements.UITextBox(
+                        html_text=texto,
+                        relative_rect=pygame.Rect((10, 10), (largura - 20, altura - 20)),
+                        manager=self.manager,
+                        container=self.janela_historico
+                    )
+                return
             # Se jogo não ativo, controla botões de recomeçar e voltar do fim
             if not self.jogo_ativo:
                 if evento.ui_element == self.botao_recomecar:
@@ -164,6 +210,7 @@ class TelaJogo:
                 elif evento.ui_element == self.botao_voltar_menu:
                     self.voltar_para_main = True
                 return
+                       
 
             # Checagem de respostas durante o jogo ativo
             for botao in self.botoes:
@@ -177,6 +224,12 @@ class TelaJogo:
                             # Game over: finaliza jogo e mostra opções
                             self.jogo_ativo = False
                             self.pontos = 0
+
+                            # Salva no histórico
+                            agora = datetime.datetime.now()
+                            registro = f"{agora.strftime('%d/%m/%Y %H:%M:%S')} - Pontuação: {self.pontos}"
+                            self.historico_partidas.append(registro)
+
                             self.mostrar_botoes_fim()
                             return
 
@@ -226,7 +279,13 @@ class TelaJogo:
         # Verifica fim do tempo ou do jogo para mudar interface
         if tempo_restante <= 0 or not self.jogo_ativo:
             self.jogo_ativo = False
-            self.mostrar_botoes_fim()
+            if not self.fim_de_jogo_exibido:
+                agora = datetime.datetime.now()
+                registro = f"{agora.strftime('%d/%m/%Y %H:%M:%S')} - Pontuação: {self.pontos}"
+                self.historico_partidas.append(registro)
+                
+                self.mostrar_botoes_fim()
+                self.fim_de_jogo_exibido = True
 
             # Mensagem de fim de jogo e pontuação final
             texto_fim = self.fonte.render("Fim de jogo!", True, (255, 255, 255))
@@ -248,14 +307,16 @@ class TelaJogo:
             self.tela.blit(texto_pergunta, (self.tela.get_width() // 2 - texto_pergunta.get_width() // 2, 215))
 
         # Mostra corações preenchidos e vazios para vidas restantes
-        for i in range(3):
-            if i < self.vidas:
-                self.tela.blit(self.coracao_vermelho, (20 + i * 40, 20))
-            else:
-                self.tela.blit(self.coracao_branco, (20 + i * 40, 20))
-
+        if self.jogo_ativo:
+            for i in range(3):
+                if i < self.vidas:
+                    self.tela.blit(self.coracao_vermelho, (20 + i * 40, 20))
+                else:
+                    self.tela.blit(self.coracao_branco, (20 + i * 40, 20))
+        
         # Mostra pontos e tempo restantes durante o jogo ativo
         if self.jogo_ativo:
+
             texto_pontos = self.fonte.render(f"Pontos: {self.pontos}", True, (255, 255, 255))
             self.tela.blit(texto_pontos, (self.tela.get_width() - 230, 20))
 
@@ -271,11 +332,19 @@ class TelaJogo:
         self.inicio = None  # reseta cronômetro
         self.operacao_escolhida = None
         self.jogo_ativo = False
+        self.fim_de_jogo_exibido = False
+
+        # Salva no histórico
+        agora = datetime.datetime.now()
+        registro = f"{agora.strftime('%d/%m/%Y %H:%M:%S')} - Pontuação: {self.pontos}"
+        self.historico_partidas.append(registro)
+
 
         # Esconde botões de resposta e fim, mostra botões de operação
         for botao in self.botoes:
             botao.hide()
         self.botao_recomecar.hide()
         self.botao_voltar_menu.hide()
+        self.botao_historico.hide()
         for botao in self.botoes_operacoes:
             botao.show()
