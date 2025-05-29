@@ -2,7 +2,7 @@ import pygame
 import pygame_gui
 import webbrowser
 from tela_jogo import TelaJogo
-from tela_regras import TelaRegras
+from tela_regras import TelaInstrucoes
 from opcoes import TelaOpcoes
 
 pygame.init()
@@ -25,9 +25,9 @@ botao_jogar = pygame_gui.elements.UIButton(
     text='Jogar',
     manager=manager
 )
-botao_regras = pygame_gui.elements.UIButton(
+botao_instrucao = pygame_gui.elements.UIButton(
     relative_rect=pygame.Rect((300, 275), (200, 50)),
-    text='Regras',
+    text='Instruções',
     manager=manager
 )
 botao_sair = pygame_gui.elements.UIButton(
@@ -52,7 +52,7 @@ hover_instagram = False
 tela_atual = "main"
 
 tela_jogo = TelaJogo(screen)
-tela_regras = TelaRegras(screen)
+tela_instrucoes = TelaInstrucoes(screen)
 tela_opcoes = TelaOpcoes(screen)
 
 def desenhar_tela_principal():
@@ -73,8 +73,8 @@ while rodando:
                 elif evento.ui_element == botao_jogar:
                     tela_atual = "jogo"
                     tela_jogo.reset_jogo()
-                elif evento.ui_element == botao_regras:
-                    tela_atual = "regras"
+                elif evento.ui_element == botao_instrucao:
+                    tela_atual = "instrucoes"
 
             elif evento.type == pygame.MOUSEBUTTONDOWN:
                 texto_icone_temp = fontawesome.render('\uf0c9', True, cor_normal)
@@ -104,8 +104,8 @@ while rodando:
         elif tela_atual == "jogo":
             tela_jogo.process_event(evento)
 
-        elif tela_atual == "regras":
-            tela_regras.process_event(evento)
+        elif tela_atual == "instrucoes":
+            tela_instrucoes.process_event(evento)
 
         elif tela_atual == "opcoes":
             tela_opcoes.process_event(evento)
@@ -142,12 +142,12 @@ while rodando:
             tela_atual = "main"
             tela_jogo.voltar_para_main = False
 
-    elif tela_atual == "regras":
-        tela_regras.update(time_delta)
-        tela_regras.draw()
-        if tela_regras.voltar_para_main:
+    elif tela_atual == "instrucoes":
+        tela_instrucoes.update(time_delta)
+        tela_instrucoes.draw()
+        if tela_instrucoes.voltar_para_main:
             tela_atual = "main"
-            tela_regras.voltar_para_main = False
+            tela_instrucoes.voltar_para_main = False
 
     elif tela_atual == "opcoes":
         tela_opcoes.update(time_delta)
