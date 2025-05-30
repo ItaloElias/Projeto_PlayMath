@@ -12,7 +12,7 @@ pygame.display.set_caption("Jogo")  # Define o título da janela
 fundo = pygame.image.load('imagens/fundo.jpg')  # Carrega imagem de fundo
 fundo = pygame.transform.scale(fundo, (800, 600))  # Redimensiona imagem
 
-fontawesome = pygame.font.Font('fa-solid-900.ttf', 40)  # Fonte para ícone
+fontawesome = pygame.font.Font('fonts_temas/fa-solid-900.ttf', 40)  # Fonte para ícone
 
 # Cores para botões e ícones
 cor_normal = (255, 255, 255)
@@ -20,7 +20,7 @@ cor_clicado = (180, 180, 180)
 cor_hover = (255, 255, 180)
 
 # Gerenciador de interface com tema personalizado
-manager = pygame_gui.UIManager((800, 600), 'theme.json')
+manager = pygame_gui.UIManager((800, 600), 'fonts_temas/theme.json')
 
 # Botão "Jogar"
 botao_jogar = pygame_gui.elements.UIButton(

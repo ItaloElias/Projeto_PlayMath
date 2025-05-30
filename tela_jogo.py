@@ -6,7 +6,7 @@ import datetime # para registro da data e hora no histórico
 class TelaJogo:
     def __init__(self, tela_principal):
         self.tela = tela_principal
-        self.manager = pygame_gui.UIManager(self.tela.get_size(), 'theme.json')
+        self.manager = pygame_gui.UIManager(self.tela.get_size(), 'fonts_temas/theme.json')
 
         # Configura fundo e fontes
         self.fundo = pygame.image.load('imagens/fundo.jpg')

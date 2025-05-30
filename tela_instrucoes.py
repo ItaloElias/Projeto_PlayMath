@@ -4,7 +4,7 @@ import pygame_gui
 class TelaInstrucoes:
     def __init__(self, tela_principal):
         self.tela = tela_principal  # Referência à tela principal do pygame
-        self.manager = pygame_gui.UIManager(self.tela.get_size(), 'theme.json')  # Gerenciador GUI
+        self.manager = pygame_gui.UIManager(self.tela.get_size(), 'fonts_temas/theme.json')  # Gerenciador GUI
 
         self.fundo_instrucoes = pygame.image.load('imagens/fundo_instrucoes.jpg')  # Imagem de fundo
         self.fundo_instrucoes = pygame.transform.scale(self.fundo_instrucoes, self.tela.get_size())  # Redimensiona fundo
