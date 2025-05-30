@@ -24,7 +24,7 @@ manager = pygame_gui.UIManager((800, 600), 'fonts_temas/theme.json')
 
 # Botão "Jogar"
 botao_jogar = pygame_gui.elements.UIButton(
-    relative_rect=pygame.Rect((260, 215), (280, 50)),
+    relative_rect=pygame.Rect((300, 215), (200, 50)),
     text='Jogar',
     manager=manager
 )

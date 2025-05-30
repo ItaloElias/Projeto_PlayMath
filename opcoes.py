@@ -15,8 +15,29 @@ class TelaOpcoes:
 
         # Botão "Voltar" centralizado na parte inferior da tela
         self.botao_voltar = pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect((300, 500), (200, 50)),
+            relative_rect=pygame.Rect((300, 415), (200, 50)),
             text="Voltar",
+            manager=self.manager
+        )
+        
+        # Botão "Audio"
+        self.botao_audio = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect((300, 215), (200, 50)),
+            text="Audio",
+            manager=self.manager
+        )
+
+       # Botão "Imagem"
+        self.botao_imagem = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect((300, 275), (200, 50)),
+            text="Imagem",
+            manager=self.manager
+        )
+
+        # Botão "Créditos"
+        self.botao_creditos = pygame_gui.elements.UIButton(
+            relative_rect=pygame.Rect((300, 335), (200, 50)),
+            text="Créditos",
             manager=self.manager
         )
 
@@ -41,7 +62,7 @@ class TelaOpcoes:
 
         # Renderiza e desenha o título "Tela de Opções" no centro superior
         texto = self.fonte.render("Tela de Opções", True, (255, 255, 255))
-        self.tela.blit(texto, (250, 270))
+        self.tela.blit(texto, (250, 120))
 
         # Desenha os elementos da interface, como botões
         self.manager.draw_ui(self.tela)
